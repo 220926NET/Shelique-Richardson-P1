@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 //using users;
 using ReimbursementTickets;
+using Microsoft.Data.SqlClient;
 
 /*
 Expense Reimbursement System~
@@ -30,6 +31,29 @@ public class start
 {
     public static void Main(string[] args)
     {
+
+        SqlConnection connection = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        connection.Open();
+        SqlCommand command = new SqlCommand("SELECT * FROM Users", connection);
+        SqlDataReader reader = command.ExecuteReader();
+        List<account> people = new List<account>();
+        while (reader.Read())
+        {
+            string name = (string)reader["firstName"];
+            string last = (string)reader["lastName"];
+            string user = (string)reader["userName"];
+            string emails = (string)reader["email"];
+            string type = (string)reader["userType"];
+            int pins = (int)reader["userPin"];
+            Console.WriteLine($"{name} {last} {user} {emails} {type} {pins}");
+
+            account users = new account(name, last, user, pins, emails, type);
+
+            people.Add(users);
+        }
+        reader.Close();
+        connection.Close();
+
         void printOptions()
         {
             Console.WriteLine("Welcome! Press [L] to login or [R] to register");
@@ -98,7 +122,7 @@ public class start
 
             //Trying to limit 6 digit pin
 
-            // while (Math.Abs(userPin) < 6 && Math.Abs(userPin) > 6)
+            // while (userPin.length>6 || userPin.length<6)
             // {
             //     Console.WriteLine("Please enter a pin that is ONLY 6 digits long");
             //     Console.WriteLine("----------------------------------------------");
@@ -131,7 +155,7 @@ public class start
 
                 //Put this list into a class/method aalone so that the login feature can access it as well
                 //add verification feature to check if user exists in accounts and if pin exists(for login feature)
-                
+
                 Console.WriteLine($"Your registration is complete, {firstName}! Welcome to the team!");
                 Console.WriteLine("----------------------------------------------");
 
@@ -192,9 +216,6 @@ public class start
             {
                 errorMessage();
             }
-
-
-
 
             App();
 
