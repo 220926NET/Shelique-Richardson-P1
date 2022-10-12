@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using users;
+//using users;
 using ReimbursementTickets;
 
 /*
@@ -37,10 +37,8 @@ public class start
             string? userInput = Console.ReadLine();
             if (userInput == "L" || userInput == "l")
             {
-
                 Console.WriteLine("Welcome back!");
                 login();
-
             }
             else if (userInput == "R" || userInput == "r")
             {
@@ -81,38 +79,59 @@ public class start
             Console.WriteLine("----------------------------------------------");
             int userPin = int.Parse(Console.ReadLine());
 
+
+
+
             Console.WriteLine("Are you an Employee [E] or a Manager [M]? Press [E] for Employee or [M] for Manager.");
             Console.WriteLine("----------------------------------------------");
             string? userType = Console.ReadLine();
+
+            account account1 = new account(firstName, lastName, userName, userPin, email, userType);
+
             if (userType == "E" || userType == "e")
             {
                 Console.WriteLine($"Your registration is complete,{firstName}! Welcome to the team!");
                 Console.WriteLine("----------------------------------------------");
                 //logic to save info to direct them to a certain start page
-            }
-            else if (userType == "M" || userType == "m")
-            {
-                Console.WriteLine($"Your registration is complete,{firstName}! Welcome to the team!");
-                Console.WriteLine("----------------------------------------------");
-                //logic to save info to direct them to a certain start page
 
-                account account1 = new account(firstName, lastName, userName, userPin, email, userType);
 
                 account1.addEmployee();
 
+            }
+            else if (userType == "M" || userType == "m")
+            {
+
+
+                //logic to save info to direct them to a certain start page
+
+                //account account1 = new account(firstName, lastName, userName, userPin, email, userType);
+
+
+
                 //Put this list into a class/method aalone so that the login feature can access it as well
                 //add verification feature to check if user exists in accounts and if pin exists(for login feature)
-                bool userNameExists = account1.addEmployee().Contains(account1);
-                if (userNameExists == true)
+                //bool userNameExists = 
+                bool userExists = account1.addEmployee().Contains(account1);
+                if (userExists == true)
                 {
                     Console.WriteLine("This username already exists! [1]Login/[2]Signup");
                     int select = Convert.ToInt32(Console.ReadLine());
-                    if (select == 1){
+                    if (select == 1)
+                    {
                         login();
-                    }else{
+                    }
+                    else
+                    {
                         register();
                     }
-                    
+
+                }
+                else
+                {
+                    Console.WriteLine($"Your registration is complete, {firstName}! Welcome to the team!");
+                    Console.WriteLine("----------------------------------------------");
+
+                    account1.addEmployee();
                 }
             }
             login();
@@ -121,15 +140,44 @@ public class start
 
         void login()
         {
-            Console.WriteLine("Login");
-            Console.WriteLine("~~~~~~~~~~~");
-            Console.WriteLine("Enter your username or email address.");
-            Console.WriteLine("----------------------------------------------");
-            string? userName = Console.ReadLine();
+            try
+            {
+                Console.WriteLine("Login");
+                Console.WriteLine("~~~~~~~~~~~");
+                Console.WriteLine("Enter your username");
+                Console.WriteLine("----------------------------------------------");
+                checkUser();
 
-            Console.WriteLine("Enter your 6 digit pin");
-            Console.WriteLine("----------------------------------------------");
-            int userPin = int.Parse(Console.ReadLine());
+                void checkUser()
+                {
+                    string? user = Console.ReadLine();
+                    account user1 = new account();
+                    List<account> currentEmployee = user1.addEmployee();
+
+                    if (user1.userName.Contains(user))
+                    {
+                        Console.WriteLine("Enter your 6 digit pin");
+                        Console.WriteLine("----------------------------------------------");
+                        int pin = int.Parse(Console.ReadLine());
+
+                        if(user1.userPin==pin){
+                             Console.WriteLine("Login successful!");
+                             App();
+                        }else{
+                            errorMessage();
+                        }
+
+                    }
+                    else
+                    {
+                        errorMessage();
+                    }
+                }
+            }
+            catch
+            {
+                errorMessage();
+            }
 
             App();
 
@@ -142,8 +190,8 @@ public class start
             Console.WriteLine("[2]Would you like to review your previous expense reimbursement tickets?");
             Console.WriteLine("----------------------------------------------");
             int userInput = int.Parse(Console.ReadLine());
-            
-            
+
+
             if (userInput == 1)
             {
                 submit.submitTicket();
@@ -151,6 +199,21 @@ public class start
                 //submit.previousTickets();
             }
         }
+
+        void errorMessage() {
+            Console.WriteLine("I don't know what's happening!");
+                Console.WriteLine("This username/pin doesn't exists! [1]Login/[2]Signup");
+                int select = Convert.ToInt32(Console.ReadLine());
+                if (select == 1)
+                {
+                    login();
+                }
+                else
+                {
+                    register();
+                }
+        }
     }
+
 
 }
