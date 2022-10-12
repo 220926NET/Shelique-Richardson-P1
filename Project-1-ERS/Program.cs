@@ -67,26 +67,51 @@ public class start
 
             Console.WriteLine("Please create a username.");
             Console.WriteLine("----------------------------------------------");
-            string? userName = Console.ReadLine();
+            string? userGuess = Console.ReadLine();
 
+            account user1 = new account();
+            List<account> currentEmployee = user1.addEmployee();
 
+            while (user1.userName.Contains(userGuess))
+            {
+                Console.WriteLine("That username exists already! Enter a new one.");
+                Console.WriteLine("----------------------------------------------");
+                string? userGuess2 = Console.ReadLine();
+                userGuess = userGuess2;
+            }
 
             Console.WriteLine("Next enter your email address.");
             Console.WriteLine("----------------------------------------------");
             string? email = Console.ReadLine();
 
+            while (user1.email.Contains(email))
+            {
+                Console.WriteLine("That email exists already! Enter a new one.");
+                Console.WriteLine("----------------------------------------------");
+                string? userGuess2 = Console.ReadLine();
+                email = userGuess2;
+            }
+
             Console.WriteLine("Please create a 6 digit pin to login");
             Console.WriteLine("----------------------------------------------");
             int userPin = int.Parse(Console.ReadLine());
 
+            //Trying to limit 6 digit pin
 
+            // while (Math.Abs(userPin) < 6 && Math.Abs(userPin) > 6)
+            // {
+            //     Console.WriteLine("Please enter a pin that is ONLY 6 digits long");
+            //     Console.WriteLine("----------------------------------------------");
+            //     int userPin2 = int.Parse(Console.ReadLine());
+            //     userPin = userPin2;
+            // }
 
 
             Console.WriteLine("Are you an Employee [E] or a Manager [M]? Press [E] for Employee or [M] for Manager.");
             Console.WriteLine("----------------------------------------------");
             string? userType = Console.ReadLine();
 
-            account account1 = new account(firstName, lastName, userName, userPin, email, userType);
+            //account account1 = new account(firstName, lastName, userName, userPin, email, userType);
 
             if (userType == "E" || userType == "e")
             {
@@ -95,44 +120,23 @@ public class start
                 //logic to save info to direct them to a certain start page
 
 
-                account1.addEmployee();
+                //account1.addEmployee();
 
             }
             else if (userType == "M" || userType == "m")
             {
-
-
                 //logic to save info to direct them to a certain start page
 
                 //account account1 = new account(firstName, lastName, userName, userPin, email, userType);
 
-
-
                 //Put this list into a class/method aalone so that the login feature can access it as well
                 //add verification feature to check if user exists in accounts and if pin exists(for login feature)
-                //bool userNameExists = 
-                bool userExists = account1.addEmployee().Contains(account1);
-                if (userExists == true)
-                {
-                    Console.WriteLine("This username already exists! [1]Login/[2]Signup");
-                    int select = Convert.ToInt32(Console.ReadLine());
-                    if (select == 1)
-                    {
-                        login();
-                    }
-                    else
-                    {
-                        register();
-                    }
+                
+                Console.WriteLine($"Your registration is complete, {firstName}! Welcome to the team!");
+                Console.WriteLine("----------------------------------------------");
 
-                }
-                else
-                {
-                    Console.WriteLine($"Your registration is complete, {firstName}! Welcome to the team!");
-                    Console.WriteLine("----------------------------------------------");
-
-                    account1.addEmployee();
-                }
+                //     account1.addEmployee();
+                // }
             }
             login();
 
@@ -160,10 +164,20 @@ public class start
                         Console.WriteLine("----------------------------------------------");
                         int pin = int.Parse(Console.ReadLine());
 
-                        if(user1.userPin==pin){
-                             Console.WriteLine("Login successful!");
-                             App();
-                        }else{
+                        if (user1.userPin == pin)
+                        {
+                            Console.WriteLine("Login successful!");
+
+                            //To check saved accounts
+
+                            // foreach (account p in currentEmployee)
+                            // {
+                            //     System.Console.WriteLine(p.firstName);
+                            // }
+                            App();
+                        }
+                        else
+                        {
                             errorMessage();
                         }
 
@@ -178,6 +192,9 @@ public class start
             {
                 errorMessage();
             }
+
+
+
 
             App();
 
@@ -200,18 +217,19 @@ public class start
             }
         }
 
-        void errorMessage() {
+        void errorMessage()
+        {
             Console.WriteLine("I don't know what's happening!");
-                Console.WriteLine("This username/pin doesn't exists! [1]Login/[2]Signup");
-                int select = Convert.ToInt32(Console.ReadLine());
-                if (select == 1)
-                {
-                    login();
-                }
-                else
-                {
-                    register();
-                }
+            Console.WriteLine("This username/pin doesn't exists! [1]Login/[2]Signup");
+            int select = Convert.ToInt32(Console.ReadLine());
+            if (select == 1)
+            {
+                login();
+            }
+            else
+            {
+                register();
+            }
         }
     }
 
