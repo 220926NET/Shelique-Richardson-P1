@@ -9,32 +9,12 @@ public class Tickets
     
     
 
+        SqlConnection connection = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
 
 
     public void submitTicket()
     {
-        SqlConnection connection = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        //  connection.Open();
-        // SqlCommand command = new SqlCommand("SELECT * FROM Tickets", connection);
-        // SqlDataReader reader = command.ExecuteReader();
-        // //List<userTickets> tickets = new List<userTickets>();
-        // while (reader.Read())
-        // {
-        //     int ticketID = (int)reader["ticketID"];
-        //     string userName = (string)reader["userName"];
-        //     string expenseNote = (string)reader["expenseNote"];
-        //     decimal cost = (decimal)reader["cost"];
-
-        //     Console.WriteLine($"{ticketID} {userName} {expenseNote} {cost}");
-
-        //     //account users = new account(name, last, user, pins, emails, type);
-
-        //     //people.Add(users);
-        // }
-        // reader.Close();
-        // connection.Close();
-
         connection.Open();
 
         Console.WriteLine("Please enter what the expense was for and any additonal notes below.");
@@ -63,8 +43,8 @@ public class Tickets
         if (response == 1)
         {
             submitTicket();
-            //}else if (response==2){
-            // previousTickets();
+            }else if (response==2){
+            previousTickets();
         }
         else
         {
@@ -73,6 +53,38 @@ public class Tickets
         }
     }
 
+
+
+    public void previousTickets(){
+
+        Console.WriteLine("Here are you previous ticket submissions!");
+        Console.WriteLine("____________________________________________");
+
+         connection.Open();
+        SqlCommand command = new SqlCommand("SELECT * FROM allTickets where userName = '"+start.userN+"'", connection);
+        SqlDataReader reader = command.ExecuteReader();
+        //List<userTickets> tickets = new List<userTickets>();
+        while (reader.Read())
+        {
+            int ticketID = (int)reader["ticketID"];
+            string userName = (string)reader["userName"];
+            string expenseNote = (string)reader["expenseNote"];
+            decimal cost = (decimal)reader["cost"];
+            string status = (string)reader["status"];
+            //DateTime date = (DateTime)reader["date"];
+
+            Console.WriteLine($"{ticketID} | {userName} | {expenseNote} | {cost} | {date} | {status}");
+
+            //account users = new account(name, last, user, pins, emails, type);
+
+            //people.Add(users);
+        }
+        reader.Close();
+        connection.Close();
+        Console.WriteLine("____________________________________________");
+
+
+    }
 
 
 }

@@ -10,7 +10,7 @@ MVPs:
 -Users should have either Employee or Manager role[X]
 -Users should be able to submit expense reimbrsement ticket[X]
 -Managers should be able to process tickets[]
--Employees should be able to vew all prior ticket submissions[]
+-Employees should be able to vew all prior ticket submissions[X]
 --Database connection-SQL[X]
 
 Ideas~
@@ -35,26 +35,26 @@ public class start
     {
 
         SqlConnection connection = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        connection.Open();
-        SqlCommand command = new SqlCommand("SELECT * FROM Users", connection);
-        SqlDataReader reader = command.ExecuteReader();
-        List<account> people = new List<account>();
-        while (reader.Read())
-        {
-            string name = (string)reader["firstName"];
-            string last = (string)reader["lastName"];
-            string user = (string)reader["userName"];
-            string emails = (string)reader["email"];
-            string type = (string)reader["userType"];
-            int pins = (int)reader["userPin"];
-            Console.WriteLine($"{name} {last} {user} {emails} {type} {pins}");
+        // connection.Open();
+         //SqlCommand command = new SqlCommand("SELECT * FROM Users", connection);
+         //SqlDataReader reader = command.ExecuteReader();
+        // List<account> people = new List<account>();
+        // while (reader.Read())
+        // {
+        //     string name = (string)reader["firstName"];
+        //     string last = (string)reader["lastName"];
+        //     string user = (string)reader["userName"];
+        //     string emails = (string)reader["email"];
+        //     string type = (string)reader["userType"];
+        //     int pins = (int)reader["userPin"];
+        //     Console.WriteLine($"{name} {last} {user} {emails} {type} {pins}");
 
-            account users = new account(name, last, user, pins, emails, type);
+        //     account users = new account(name, last, user, pins, emails, type);
 
-            people.Add(users);
-        }
-        reader.Close();
-        connection.Close();
+        //     people.Add(users);
+        // }
+        // reader.Close();
+        // connection.Close();
 
 
 
@@ -232,7 +232,7 @@ public class start
                         {
                             errorMessage();
                         }
-                        reader.Close();
+                        //reader.Close();
                         connection.Close();
                     }
                     else
@@ -278,8 +278,8 @@ public class start
             if (userInput == 1)
             {
                 submit.submitTicket();
-                //}else if (userInput==2){
-                //submit.previousTickets();
+                }else if (userInput==2){
+                submit.previousTickets();
             }
         }
 
