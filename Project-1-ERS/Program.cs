@@ -10,7 +10,7 @@ MVPs:
 -Users should have either Employee or Manager role[X]
 -Users should be able to submit expense reimbrsement ticket[X]
 -Managers should be able to process tickets[]
--Employees should be able to vew all prior ticket submissions[X]
+-Employees should be able to view all prior ticket submissions[X]
 --Database connection-SQL[X]
 
 Ideas~
@@ -36,8 +36,8 @@ public class start
 
         SqlConnection connection = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         // connection.Open();
-         //SqlCommand command = new SqlCommand("SELECT * FROM Users", connection);
-         //SqlDataReader reader = command.ExecuteReader();
+        //SqlCommand command = new SqlCommand("SELECT * FROM Users", connection);
+        //SqlDataReader reader = command.ExecuteReader();
         // List<account> people = new List<account>();
         // while (reader.Read())
         // {
@@ -182,8 +182,8 @@ public class start
                 //     account1.addEmployee();
                 // }
             }
-             string insertUser = "Insert into Users (firstName, lastName, userName, userPin, email, userType) values ('"+ firstName + "','" + lastName + "','" + userGuess + "','"+ userPin + "','" + email + "','" + userType + "')";
-            SqlCommand addUser = new SqlCommand( insertUser, connection);
+            string insertUser = "Insert into Users (firstName, lastName, userName, userPin, email, userType) values ('" + firstName + "','" + lastName + "','" + userGuess + "','" + userPin + "','" + email + "','" + userType + "')";
+            SqlCommand addUser = new SqlCommand(insertUser, connection);
             //addUser.Parameters.AddWithValue("userName", @userN);
             addUser.ExecuteNonQuery();
             connection.Close();
@@ -204,7 +204,7 @@ public class start
 
                 void checkUser()
                 {
-                    
+
                     connection.Open();
                     userN = Console.ReadLine();
                     account user1 = new account();
@@ -226,6 +226,7 @@ public class start
                         if (pinExist > 0)
                         {
                             Console.WriteLine("Login successful!");
+                            connection.Close();
                             App();
                         }
                         else
@@ -233,7 +234,7 @@ public class start
                             errorMessage();
                         }
                         //reader.Close();
-                        connection.Close();
+                        
                     }
                     else
                     {
@@ -244,7 +245,7 @@ public class start
             }
             catch
             {
-                errorMessage();
+                //errorMessage();
 
             }
 
@@ -268,19 +269,42 @@ public class start
 
         void App()
         {
-            Tickets submit = new Tickets();
-            Console.WriteLine("[1]Would you like to submit an expense reimbursement ticket?");
-            Console.WriteLine("[2]Would you like to review your previous expense reimbursement tickets?");
-            Console.WriteLine("----------------------------------------------");
-            int userInput = int.Parse(Console.ReadLine());
+            connection.Open();
+            SqlCommand isManager = new SqlCommand("select userName from Users where userType = 'M' and userName = '" + userN + "'", connection);
+            string M = (string)isManager.ExecuteScalar();
 
-
-            if (userInput == 1)
+            Manager manage = new Manager();
+            if (M == userN)
             {
-                submit.submitTicket();
-                }else if (userInput==2){
-                submit.previousTickets();
+                connection.Close();
+                manage.managerApp();
+                
             }
+            else
+            {
+
+                Tickets submit = new Tickets();
+                Console.WriteLine("[1]Would you like to submit an expense reimbursement ticket?");
+                Console.WriteLine("[2]Would you like to review your previous expense reimbursement tickets?");
+                Console.WriteLine("----------------------------------------------");
+                int userInput = int.Parse(Console.ReadLine());
+
+
+                if (userInput == 1)
+                {
+                    submit.submitTicket();
+                }
+                else if (userInput == 2)
+                {
+                    submit.previousTickets();
+                }
+            }
+
+
+
+            
+
+
         }
 
 
