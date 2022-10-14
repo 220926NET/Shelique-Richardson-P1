@@ -115,6 +115,18 @@ public class start
                 userGuess = Console.ReadLine();
             }
 
+            Console.WriteLine("Please create a 6 digit pin to login");
+            Console.WriteLine("----------------------------------------------");
+            var userPin = Console.ReadLine();
+
+            //Trying to limit 6 digit pin
+
+            while (userPin.Length > 6 || userPin.Length < 6)
+            {
+                Console.WriteLine("Please enter a pin that is ONLY 6 digits long");
+                Console.WriteLine("----------------------------------------------");
+                userPin = Console.ReadLine();
+            }
 
             Console.WriteLine("Next enter your email address.");
             Console.WriteLine("----------------------------------------------");
@@ -131,22 +143,11 @@ public class start
                 }
                 Console.WriteLine("That email exists already! Enter a new one.");
                 Console.WriteLine("----------------------------------------------");
-                email  = Console.ReadLine();   
+                email = Console.ReadLine();
             }
 
-            Console.WriteLine("Please create a 6 digit pin to login");
-            Console.WriteLine("----------------------------------------------");
-            var userPin = Console.ReadLine();
 
-            //Trying to limit 6 digit pin
 
-            while (userPin.Length>6 || userPin.Length <6)
-            {
-                Console.WriteLine("Please enter a pin that is ONLY 6 digits long");
-                Console.WriteLine("----------------------------------------------");
-                userPin = Console.ReadLine();  
-            }
-            
             Console.WriteLine("Are you an Employee [E] or a Manager [M]? Press [E] for Employee or [M] for Manager.");
             Console.WriteLine("----------------------------------------------");
             string? userType = Console.ReadLine();
@@ -174,9 +175,15 @@ public class start
                 Console.WriteLine($"Your registration is complete, {firstName}! Welcome to the team!");
                 Console.WriteLine("----------------------------------------------");
 
+
+
                 //     account1.addEmployee();
                 // }
             }
+             string insertUser = "Insert into Users (firstName, lastName, userName, userPin, email, userType) values ('"+ firstName + "','" + lastName + "','" + userGuess + "','"+ userPin + "','" + email + "','" + userType + "')";
+            SqlCommand addUser = new SqlCommand( insertUser, connection);
+            //addUser.Parameters.AddWithValue("userName", @userN);
+            addUser.ExecuteNonQuery();
             connection.Close();
             login();
 
@@ -184,9 +191,6 @@ public class start
 
         void login()
         {
-
-
-
             Console.WriteLine("Login");
             Console.WriteLine("~~~~~~~~~~~");
             Console.WriteLine("Enter your username");
