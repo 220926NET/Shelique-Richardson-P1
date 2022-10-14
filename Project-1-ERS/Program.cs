@@ -6,12 +6,12 @@ using Microsoft.Data.SqlClient;
 /*
 Expense Reimbursement System~
 MVPs:
--Users should be able to login/register
--Users should have either Employee or Manager role
--Users should be able to submit expense reimbrsement ticket
--Managers should be able to process tickets
--Employees should be able to vew all prior ticket submissions
---Database connection-SQL
+-Users should be able to login/register[X]
+-Users should have either Employee or Manager role[X]
+-Users should be able to submit expense reimbrsement ticket[X]
+-Managers should be able to process tickets[]
+-Employees should be able to vew all prior ticket submissions[]
+--Database connection-SQL[X]
 
 Ideas~
 --Employees class with Manager class embedded with additional features (Inheritance)
@@ -54,6 +54,8 @@ public class start
         reader.Close();
         connection.Close();
 
+
+
         void printOptions()
         {
             Console.WriteLine("Welcome! Press [L] to login or [R] to register");
@@ -80,6 +82,8 @@ public class start
 
         void register()
         {
+            connection.Open();
+
             Console.WriteLine("Register");
             Console.WriteLine("~~~~~~~~~~~");
             Console.WriteLine("Please enter your first name.");
@@ -93,44 +97,56 @@ public class start
             Console.WriteLine("----------------------------------------------");
             string? userGuess = Console.ReadLine();
 
-            account user1 = new account();
-            List<account> currentEmployee = user1.addEmployee();
+            //account user1 = new account();
+            //List<account> currentEmployee = user1.addEmployee();
 
-            while (user1.userName.Contains(userGuess))
+            SqlCommand checkUserName = new SqlCommand("select userName from Users where userName = '" + userGuess + "'", connection);
+            //checkUserName.Parameters.AddWithValue("userName", @userN);
+            string userExist = (string)checkUserName.ExecuteScalar();
+
+            while (true)
             {
+                if (userExist != userGuess)
+                {
+                    break;
+                }
                 Console.WriteLine("That username exists already! Enter a new one.");
                 Console.WriteLine("----------------------------------------------");
-                string? userGuess2 = Console.ReadLine();
-                userGuess = userGuess2;
+                userGuess = Console.ReadLine();
             }
+
 
             Console.WriteLine("Next enter your email address.");
             Console.WriteLine("----------------------------------------------");
             string? email = Console.ReadLine();
+            SqlCommand checkEmail = new SqlCommand("select email from Users where email = '" + email + "'", connection);
+            //checkUserName.Parameters.AddWithValue("userName", @userN);
+            string emailExist = (string)checkEmail.ExecuteScalar();
 
-            while (user1.email.Contains(email))
+            while (true)
             {
+                if (emailExist != email)
+                {
+                    break;
+                }
                 Console.WriteLine("That email exists already! Enter a new one.");
                 Console.WriteLine("----------------------------------------------");
-                string? userGuess2 = Console.ReadLine();
-                email = userGuess2;
+                email  = Console.ReadLine();   
             }
 
             Console.WriteLine("Please create a 6 digit pin to login");
             Console.WriteLine("----------------------------------------------");
-            int userPin = int.Parse(Console.ReadLine());
+            var userPin = Console.ReadLine();
 
             //Trying to limit 6 digit pin
 
-            // while (userPin.length>6 || userPin.length<6)
-            // {
-            //     Console.WriteLine("Please enter a pin that is ONLY 6 digits long");
-            //     Console.WriteLine("----------------------------------------------");
-            //     int userPin2 = int.Parse(Console.ReadLine());
-            //     userPin = userPin2;
-            // }
-
-
+            while (userPin.Length>6 || userPin.Length <6)
+            {
+                Console.WriteLine("Please enter a pin that is ONLY 6 digits long");
+                Console.WriteLine("----------------------------------------------");
+                userPin = Console.ReadLine();  
+            }
+            
             Console.WriteLine("Are you an Employee [E] or a Manager [M]? Press [E] for Employee or [M] for Manager.");
             Console.WriteLine("----------------------------------------------");
             string? userType = Console.ReadLine();
@@ -154,7 +170,6 @@ public class start
                 //account account1 = new account(firstName, lastName, userName, userPin, email, userType);
 
                 //Put this list into a class/method aalone so that the login feature can access it as well
-                //add verification feature to check if user exists in accounts and if pin exists(for login feature)
 
                 Console.WriteLine($"Your registration is complete, {firstName}! Welcome to the team!");
                 Console.WriteLine("----------------------------------------------");
@@ -162,63 +177,86 @@ public class start
                 //     account1.addEmployee();
                 // }
             }
+            connection.Close();
             login();
 
         }
 
         void login()
         {
+
+
+
+            Console.WriteLine("Login");
+            Console.WriteLine("~~~~~~~~~~~");
+            Console.WriteLine("Enter your username");
+            Console.WriteLine("----------------------------------------------");
+
             try
             {
-                Console.WriteLine("Login");
-                Console.WriteLine("~~~~~~~~~~~");
-                Console.WriteLine("Enter your username");
-                Console.WriteLine("----------------------------------------------");
                 checkUser();
 
                 void checkUser()
                 {
-                    string? user = Console.ReadLine();
+                    connection.Open();
+                    string? userN = Console.ReadLine();
                     account user1 = new account();
-                    List<account> currentEmployee = user1.addEmployee();
+                    // List<account> currentEmployee = user1.addEmployee();
 
-                    if (user1.userName.Contains(user))
+                    SqlCommand checkUserName = new SqlCommand("select count(*) from Users where userName = '" + userN + "'", connection);
+                    //checkUserName.Parameters.AddWithValue("userName", @userN);
+                    int userExist = (int)checkUserName.ExecuteScalar();
+                    if (userExist > 0)
                     {
                         Console.WriteLine("Enter your 6 digit pin");
                         Console.WriteLine("----------------------------------------------");
                         int pin = int.Parse(Console.ReadLine());
 
-                        if (user1.userPin == pin)
+                        SqlCommand checkPin = new SqlCommand("select count(*) from Users where userName = '" + userN + "' and userPin = '" + pin + "'", connection);
+                        //checkPin.Parameters.AddWithValue("userPin", @pin);
+                        int pinExist = (int)checkPin.ExecuteScalar();
+
+                        if (pinExist > 0)
                         {
                             Console.WriteLine("Login successful!");
-
-                            //To check saved accounts
-
-                            // foreach (account p in currentEmployee)
-                            // {
-                            //     System.Console.WriteLine(p.firstName);
-                            // }
                             App();
                         }
                         else
                         {
                             errorMessage();
                         }
-
+                        reader.Close();
+                        connection.Close();
                     }
                     else
                     {
                         errorMessage();
                     }
+
                 }
             }
             catch
             {
                 errorMessage();
+
             }
 
             App();
 
+        }
+        void errorMessage()
+        {
+            Console.WriteLine("I don't know what's happening!");
+            Console.WriteLine("This username/pin doesn't exists! [1]Login/[2]Signup");
+            int select = Convert.ToInt32(Console.ReadLine());
+            if (select == 1)
+            {
+                login();
+            }
+            else
+            {
+                register();
+            }
         }
 
         void App()
@@ -238,20 +276,8 @@ public class start
             }
         }
 
-        void errorMessage()
-        {
-            Console.WriteLine("I don't know what's happening!");
-            Console.WriteLine("This username/pin doesn't exists! [1]Login/[2]Signup");
-            int select = Convert.ToInt32(Console.ReadLine());
-            if (select == 1)
-            {
-                login();
-            }
-            else
-            {
-                register();
-            }
-        }
+
+
     }
 
 
