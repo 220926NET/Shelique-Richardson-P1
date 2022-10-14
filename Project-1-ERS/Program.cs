@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 //using users;
-using ReimbursementTickets;
+//using ReimbursementTickets;
 using Microsoft.Data.SqlClient;
 
 /*
@@ -29,6 +29,8 @@ Ideas~
 
 public class start
 {
+
+    public static string? userN;
     public static void Main(string[] args)
     {
 
@@ -202,8 +204,9 @@ public class start
 
                 void checkUser()
                 {
+                    
                     connection.Open();
-                    string? userN = Console.ReadLine();
+                    userN = Console.ReadLine();
                     account user1 = new account();
                     // List<account> currentEmployee = user1.addEmployee();
 
