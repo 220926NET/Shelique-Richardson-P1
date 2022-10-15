@@ -3,19 +3,22 @@ using Microsoft.Data.SqlClient;
 
 public class Manager
 {
-            SqlConnection conn = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+    //Connection to the DB
+    SqlConnection conn = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
     public void managerApp()
     {
-
+        //Menu for the managers
         Tickets submit1 = new Tickets();
         Console.WriteLine("[1]Would you like to submit an expense reimbursement ticket?");
         Console.WriteLine("[2]Would you like to review your previous expense reimbursement tickets?");
         Console.WriteLine("[3]Would you like to view all expense reimbursement tickets?");
         Console.WriteLine("[4]Would you like to process pending tickets?");
-        Console.WriteLine("----------------------------------------------");
+        Console.WriteLine("[0]Logout");
+        Console.WriteLine("--------------------------------------------------------------------------");
 
         int input = int.Parse(Console.ReadLine());
+        Console.WriteLine("----------------------------");
 
         if (input == 1)
         {
@@ -25,26 +28,35 @@ public class Manager
         {
             submit1.previousTickets2();
         }
-        else if(input == 3){
+        else if (input == 3)
+        {
             viewAllTickets();
 
-        }else if(input == 4){
+        }
+        else if (input == 4)
+        {
+            processTickets();
+        }
+        else if(input == 0)
+        {
+            Console.WriteLine("See you later! GoodBye!");
+
+             Environment.Exit(0);
 
         }
 
     }
 
-
-
-    public void viewAllTickets(){
-         conn.Open();
+    //To view all tickets in the DB
+    public void viewAllTickets()
+    {
+        conn.Open();
 
         Console.WriteLine("Here are all of the ticket submissions!");
         Console.WriteLine("____________________________________________");
         SqlCommand allTix = new SqlCommand("SELECT * FROM allTickets", conn);
 
         SqlDataReader reading = allTix.ExecuteReader();
-        //List<userTickets> tickets = new List<userTickets>();
         while (reading.Read())
         {
             int tickID = (int)reading["ticketID"];
@@ -52,15 +64,68 @@ public class Manager
             string exNote = (string)reading["expenseNote"];
             decimal price = (decimal)reading["cost"];
             string stats = (string)reading["status"];
-            DateTime  date = (DateTime)reading["date"];
+            DateTime date = (DateTime)reading["date"];
 
+            //To list the info from the DB in the Console
             Console.WriteLine($"{tickID} | {useName} | {exNote} | {price} | {date} | {stats}");
+            Console.WriteLine("________________________________________________________");
 
-            //account users = new account(name, last, user, pins, emails, type);
-
-            //people.Add(users);
         }
         reading.Close();
+        conn.Close();
+        managerApp();
+
+    }
+
+    public void processTickets()
+    {
+        Console.WriteLine("Here are all the tickets that are pending!");
+        Console.WriteLine("______________________________________________");
+
+        conn.Open();
+        SqlCommand all = new SqlCommand("SELECT * FROM allTickets where status = 'Pending Approval'", conn);
+        SqlDataReader viewAll = all.ExecuteReader();
+
+        while (viewAll.Read())
+        {
+            int tickID = (int)viewAll["ticketID"];
+            string useName = (string)viewAll["userName"];
+            string exNote = (string)viewAll["expenseNote"];
+            decimal price = (decimal)viewAll["cost"];
+            string stats = (string)viewAll["status"];
+            DateTime date = (DateTime)viewAll["date"];
+
+
+            Console.WriteLine($"{tickID} | {useName} | {exNote} | {price} | {date} | {stats}");
+            Console.WriteLine("________________________________________________________");
+
+        }
+        viewAll.Close();
+
+
+        Console.WriteLine("Enter the ticketId of the ticket you want to process");
+        int tixID = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("----------------------------");
+        Console.WriteLine("[1]Approve Request/[2]Deny Request");
+        Console.WriteLine("____________________________________________");
+
+        int process = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("----------------------------");
+        if (process == 1)
+        {
+            SqlCommand approveTix = new SqlCommand("update allTickets SET [status] = 'Approved' where ticketID= '" + tixID + "'", conn);
+            approveTix.ExecuteNonQuery();
+            Console.WriteLine("____________________________________________");
+            Console.WriteLine($" Ticket number {tixID} has been approved!");
+
+        }else if (process == 2)
+        {
+            SqlCommand denyTix = new SqlCommand("update allTickets SET [status] = 'Denied' where ticketID= '" + tixID + "'", conn);
+            denyTix.ExecuteNonQuery();
+            Console.WriteLine("____________________________________________");
+            Console.WriteLine($" Ticket number {tixID} has been denied!");
+
+        }
         conn.Close();
         Console.WriteLine("____________________________________________");
         managerApp();
