@@ -1,8 +1,8 @@
 
-public class theKey
+internal static class theKey
 {
 
-    public string pass = "flashProject01";
+    internal const string password = "flashProject01";
 
     
 }

@@ -6,7 +6,8 @@ public class Tickets
     public string expenseNote;
     public DateTime date = DateTime.Today;
 
-        SqlConnection connection = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        //Connection to the DB
+        SqlConnection connection = new SqlConnection1().connectString();
 
     public void TixMenu(){
         Console.WriteLine("[1]Submit a Ticket?");

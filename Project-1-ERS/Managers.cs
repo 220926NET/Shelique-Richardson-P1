@@ -4,7 +4,7 @@ using Microsoft.Data.SqlClient;
 public class Manager
 {
     //Connection to the DB
-    SqlConnection conn = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        SqlConnection conn = new SqlConnection1().connectString();
 
     public void managerApp()
     {

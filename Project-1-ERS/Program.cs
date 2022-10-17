@@ -21,9 +21,9 @@ public class start
     //To track user (by username) while using the app
     public static void Main(string[] args)
     {
-
-        SqlConnection connection = new SqlConnection("Server=tcp:revexample.database.windows.net,1433;Initial Catalog=RevatureEx;Persist Security Info=False;User ID=FlashCard;Password=flashProject01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-
+        //Connection to the DB
+        SqlConnection connection = new SqlConnection1().connectString();
+        
         void printOptions()
         {
             //App entry point
@@ -226,10 +226,12 @@ public class start
             
             if (select == 1)
             {
+                connection.Close();
                 login();
             }
             else
             {
+                connection.Close();
                 register();
             }
         }
