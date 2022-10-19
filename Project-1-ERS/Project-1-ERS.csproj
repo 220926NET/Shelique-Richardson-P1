@@ -1,10 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- <ItemGroup>
-    <ProjectReference Include="..\users\users.csproj" />
-    <ProjectReference Include="..\Tickets\Tickets.csproj" />
-  </ItemGroup> -->
-
   <ItemGroup>
     <PackageReference Include="microsoft.data.sqlclient" Version="5.0.1" />
   </ItemGroup>

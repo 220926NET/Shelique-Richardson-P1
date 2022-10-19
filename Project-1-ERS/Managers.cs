@@ -4,29 +4,31 @@ using Microsoft.Data.SqlClient;
 public class Manager
 {
     //Connection to the DB
-        SqlConnection conn = new SqlConnection1().connectString();
+    SqlConnection conn = new SqlConnection1().connectString();
 
     public void managerApp()
     {
         //Menu for the managers
         Tickets submit1 = new Tickets();
-        Console.WriteLine("[1]Would you like to submit an expense reimbursement ticket?");
-        Console.WriteLine("[2]Would you like to review your previous expense reimbursement tickets?");
-        Console.WriteLine("[3]Would you like to view all expense reimbursement tickets?");
-        Console.WriteLine("[4]Would you like to process pending tickets?");
+        Console.WriteLine("What would you like to do?");
+        Console.WriteLine("========================================================");
+        Console.WriteLine("[1]Submit an expense reimbursement ticket?");
+        Console.WriteLine("[2]Review your previous tickets?");
+        Console.WriteLine("[3]View all tickets?");
+        Console.WriteLine("[4]Process pending tickets?");
         Console.WriteLine("[0]Logout");
-        Console.WriteLine("--------------------------------------------------------------------------");
+        Console.WriteLine("========================================================");
 
         int input = int.Parse(Console.ReadLine());
         Console.WriteLine("----------------------------");
 
         if (input == 1)
         {
-            submit1.submitTicket2();
+            submit1.submitTicket();
         }
         else if (input == 2)
         {
-            submit1.previousTickets2();
+            submit1.previousTickets();
         }
         else if (input == 3)
         {
@@ -37,14 +39,13 @@ public class Manager
         {
             processTickets();
         }
-        else if(input == 0)
+        else if (input == 0)
         {
+            Console.WriteLine("==========================");
             Console.WriteLine("See you later! GoodBye!");
-
-             Environment.Exit(0);
-
+            Console.WriteLine("==========================");
+            Environment.Exit(0);
         }
-
     }
 
     //To view all tickets in the DB
@@ -74,9 +75,9 @@ public class Manager
         reading.Close();
         conn.Close();
         managerApp();
-
     }
 
+    //To process pending tickets in the DB
     public void processTickets()
     {
         Console.WriteLine("Here are all the tickets that are pending!");
@@ -118,7 +119,8 @@ public class Manager
             Console.WriteLine("____________________________________________");
             Console.WriteLine($" Ticket number {tixID} has been approved!");
 
-        }else if (process == 2)
+        }
+        else if (process == 2)
         {
             SqlCommand denyTix = new SqlCommand("update allTickets SET [status] = 'Denied' where ticketID= '" + tixID + "'", conn);
             denyTix.ExecuteNonQuery();
