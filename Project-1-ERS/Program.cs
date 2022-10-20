@@ -16,8 +16,7 @@ public class start
 {
     public static string? userN;
     //To track user (by username) while using the app
-    SqlConnection connection = new SqlConnection1().connectString();
-    //Connection to the DB
+     
 
     public static void Main(string[] args)
     {
@@ -52,49 +51,9 @@ public class start
 
     public void App()
     {
-        connection.Open();
-        SqlCommand isManager = new SqlCommand("select userName from Users where userType = 'M' and userName = '" + userN + "'", connection);
-        string M = (string)isManager.ExecuteScalar();
+        DBaccess app = new DBaccess();
 
-        //checks if the user logged in is a manager or regular employee
-        Manager manage = new Manager();
-        if (M == userN)
-        {
-            connection.Close();
-            //start page for managers
-            manage.managerApp();
-        }
-        else
-        {
-            //start page for regular employees
-            Tickets submit = new Tickets();
-            Console.WriteLine("What would you like to do today?");
-            Console.WriteLine("========================================================");
-            Console.WriteLine("[1]Submit an expense reimbursement ticket?");
-            Console.WriteLine("[2]Review your previous expense reimbursement tickets?");
-            Console.WriteLine("[0]Logout");
-            Console.WriteLine("========================================================");
-            int userInput = int.Parse(Console.ReadLine());
-            Console.WriteLine("----------------------------------------------");
-
-            if (userInput == 1)
-            {
-                connection.Close();
-                submit.submitTicket();
-            }
-            else if (userInput == 2)
-            {
-                connection.Close();
-                submit.previousTickets();
-            }
-            else if (userInput == 0)
-            {
-                Console.WriteLine("==========================");
-                Console.WriteLine("See you later! GoodBye!");
-                Console.WriteLine("==========================");
-                Environment.Exit(0);
-            }
-        }
+        app.DBapp();
 
     }
 
