@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{8D63E1D6-6000-469C-A1C9-C7184E1D3772}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataRepoLayer", "DataRepoLayer\DataRepoLayer.csproj", "{21AF52EE-926D-44D8-9CFF-4254FCD7E71C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsLayer", "ModelsLayer\ModelsLayer.csproj", "{5206BD02-6F59-44B4-8AEC-8D3079E6C8DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{8B757A67-4BAC-4962-B9EC-3C1B3C895507}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataRepoLayer", "DataRepoLayer\DataRepoLayer.csproj", "{8A9C2E4C-92C5-4EDA-ADDB-68966D9CA732}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERSapi", "ERSapi\ERSapi.csproj", "{706354F8-232A-43FD-888E-0861F518371A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +32,17 @@ Global
 		{5206BD02-6F59-44B4-8AEC-8D3079E6C8DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5206BD02-6F59-44B4-8AEC-8D3079E6C8DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5206BD02-6F59-44B4-8AEC-8D3079E6C8DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B757A67-4BAC-4962-B9EC-3C1B3C895507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B757A67-4BAC-4962-B9EC-3C1B3C895507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B757A67-4BAC-4962-B9EC-3C1B3C895507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B757A67-4BAC-4962-B9EC-3C1B3C895507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A9C2E4C-92C5-4EDA-ADDB-68966D9CA732}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A9C2E4C-92C5-4EDA-ADDB-68966D9CA732}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A9C2E4C-92C5-4EDA-ADDB-68966D9CA732}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A9C2E4C-92C5-4EDA-ADDB-68966D9CA732}.Release|Any CPU.Build.0 = Release|Any CPU
+		{706354F8-232A-43FD-888E-0861F518371A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{706354F8-232A-43FD-888E-0861F518371A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{706354F8-232A-43FD-888E-0861F518371A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{706354F8-232A-43FD-888E-0861F518371A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
